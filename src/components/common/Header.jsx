@@ -17,10 +17,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useAuthStore } from '../../stores/authStore';
-
+import { useTheme } from '../../contexts/ThemeContext';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 const Header = ({ open, drawerWidth, handleDrawerToggle }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+    const { darkMode, toggleDarkMode } = useTheme();
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenu = (event) => {
@@ -61,6 +65,16 @@ const Header = ({ open, drawerWidth, handleDrawerToggle }) => {
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
           Book Recommendation Admin
         </Typography>
+
+        <IconButton 
+          color="inherit" 
+          onClick={toggleDarkMode} 
+          sx={{ mr: 2 }}
+          aria-label="toggle dark mode"
+        >
+          {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Tooltip title="Account settings">
             <IconButton

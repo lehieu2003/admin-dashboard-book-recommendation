@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.MuiPaper-root,
+.MuiAppBar-root,
+.MuiDrawer-paper,
+.MuiCard-root {
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease !important;
+}
 
 * {
   box-sizing: border-box;

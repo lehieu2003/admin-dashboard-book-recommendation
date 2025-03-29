@@ -10,6 +10,7 @@ import {
   ListItemText,
   Divider,
   Collapse,
+  Typography,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
@@ -20,9 +21,12 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import BookIcon from '@mui/icons-material/Book';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import { useTheme as useMuiTheme } from '@mui/material/styles';
 
 const Sidebar = ({ open, drawerWidth }) => {
   const location = useLocation();
+    const theme = useMuiTheme();
+
   const [booksOpen, setBooksOpen] = useState(location.pathname.startsWith('/books'));
 
   const handleBooksClick = () => {
@@ -69,10 +73,24 @@ const Sidebar = ({ open, drawerWidth }) => {
     }
   ];
 
+  
   const drawer = (
     <div>
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <img src="/logo.png" alt="Book Recommendation" style={{ maxWidth: '80%' }} />
+      <Box 
+        sx={{ 
+          p: 2, 
+          textAlign: 'center',
+          backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)'
+        }}
+      >
+        <img 
+          src="/logo.png" 
+          alt="Book Recommendation Logo" 
+          style={{ maxWidth: '100%', marginBottom: '10px' }} 
+        />
+        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+          Book Admin
+        </Typography>
       </Box>
       <Divider />
       <List>
