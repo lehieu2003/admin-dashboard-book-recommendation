@@ -94,9 +94,57 @@ export const mockApiClient = {
     };
   },
   
-  async deleteBook() {
+  async deleteBook(id) {
     await delay(600);
-    return { success: true };
+    // Find the index of the book to delete
+    const bookIndex = mockBooks.findIndex(book => book.id === id);
+    
+    if (bookIndex !== -1) {
+      // Create a copy of mockBooks with the book removed
+      const updatedBooks = [...mockBooks];
+      updatedBooks.splice(bookIndex, 1);
+      
+      // Replace the mockBooks array with the updated version
+      // Note: In a real implementation, this would be handled by the backend
+      mockBooks.length = 0;
+      mockBooks.push(...updatedBooks);
+      
+      return { 
+        success: true, 
+        message: 'Book deleted successfully',
+        deletedId: id
+      };
+    }
+    
+    throw { response: { data: { message: 'Book not found' } } };
+  },
+  
+  async batchDeleteBooks(bookIds) {
+    await delay(800);
+    
+    // Filter out the books that are being deleted
+    const remainingBooks = mockBooks.filter(book => !bookIds.includes(book.id));
+    
+    // Update the mockBooks array
+    // Note: In a real implementation, this would be handled by the backend
+    mockBooks.length = 0;
+    mockBooks.push(...remainingBooks);
+    
+    return { 
+      success: true,
+      deletedCount: bookIds.length,
+      deletedIds: bookIds,
+      message: `Successfully deleted ${bookIds.length} books`
+    };
+  },
+
+  async restoreBook(bookIds) {
+    await delay(800);
+    return {
+      success: true,
+      restoredCount: bookIds.length,
+      message: `Successfully restored ${bookIds.length} books`
+    }
   },
 
   // Categories API

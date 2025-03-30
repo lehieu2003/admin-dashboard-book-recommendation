@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-// import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import DashboardLayout from './layouts/DashboardLayout';
 import Login from './pages/Auth/Login.jsx';
@@ -12,26 +11,23 @@ import Categories from './pages/Categories/index.jsx';
 import RecommendationSettings from './pages/RecommendationSettings/index.jsx';
 import FileManager from './pages/FileManager/index.jsx';
 import { useAuthStore } from './stores/authStore.js';
-// import { useEffect } from 'react';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
-// import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import Settings from './pages/Settings/index.jsx';
 
 function AppContent() {
   const { darkMode } = useTheme();
-  const { isAuthenticated } = useAuthStore();
+  // const { isAuthenticated } = useAuthStore();
+  const isAuthenticated = true; // For testing purposes, set to true
 
-  // Tạo theme dựa trên dark mode
-  // Trong App.js, điều chỉnh createTheme
 const theme = createTheme({
   palette: {
     mode: darkMode ? 'dark' : 'light',
     primary: {
-      main: darkMode ? '#90caf9' : '#1976d2', // Màu xanh nhạt hơn trong dark mode
+      main: darkMode ? '#90caf9' : '#1976d2', 
     },
     secondary: {
-      main: darkMode ? '#f48fb1' : '#dc004e', // Màu hồng nhạt hơn trong dark mode
+      main: darkMode ? '#f48fb1' : '#dc004e', 
     },
     background: {
       default: darkMode ? '#121212' : '#f5f5f5',

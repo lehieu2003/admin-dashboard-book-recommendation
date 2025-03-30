@@ -26,6 +26,7 @@ export const useAuthStore = create(
     }),
     {
       name: 'auth-storage',
+      getStorage: () => localStorage, // Use localStorage for persistence
     }
   )
 );

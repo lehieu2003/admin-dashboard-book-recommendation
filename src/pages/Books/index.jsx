@@ -26,7 +26,8 @@ import {
   Backdrop,
   CircularProgress,
   Checkbox,
-  Grid
+  Grid,
+  Grid2
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -63,21 +64,33 @@ function Books() {
       await bookApi.batchDeleteBooks(selectedBooks);
       setBatchActionDialog({ open: false, action: null });
       setSelectedBooks([]);
-      refetch(); // Refetch dữ liệu sau khi xóa
+      await refetch(); // Ensure refetch completes before continuing
+      
+      // If all books were deleted from the current page, go back to page 1
+      if (data?.books?.length === selectedBooks.length) {
+        setPagination({
+          ...pagination,
+          page: 1
+        });
+        // Force a second refetch to load page 1 data
+        setTimeout(() => {
+          refetch();
+        }, 100);
+      }
     } catch (error) {
       console.error('Error batch deleting books:', error);
     }
   };
 
   // Hàm xử lý khôi phục sách đã xóa
-  // const handleRestore = async (bookId) => {
-  //   try {
-  //     await bookApi.restoreBook(bookId);
-  //     refetch(); // Refetch dữ liệu sau khi khôi phục
-  //   } catch (error) {
-  //     console.error('Error restoring book:', error);
-  //   }
-  // };
+  const handleRestore = async (bookId) => {
+    try {
+      await bookApi.restoreBook(bookId);
+      refetch(); // Refetch dữ liệu sau khi khôi phục
+    } catch (error) {
+      console.error('Error restoring book:', error);
+    }
+  };
 
 
   // Get books with filters and pagination
@@ -134,7 +147,18 @@ function Books() {
     try {
       await bookApi.deleteBook(deleteDialog.bookId);
       setDeleteDialog({ open: false, bookId: null });
-      refetch();
+      await refetch();
+      
+      if (data?.books?.length === selectedBooks.length) {
+        setPagination({
+          ...pagination,
+          page: 1
+        });
+        // Force a second refetch to load page 1 data
+        setTimeout(() => {
+          refetch();
+        }, 100);
+      }
     } catch (error) {
       console.error('Error deleting book:', error);
     }
@@ -172,8 +196,8 @@ function Books() {
       </Box>
 
       <Paper sx={{ p: 2, mb: 3 }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} sm={4}>
+        <Grid2 container spacing={2} alignItems="center">
+          <Grid2 item xs={12} sm={4}>
             <TextField
               fullWidth
               label="Search books"
@@ -182,8 +206,8 @@ function Books() {
               onChange={handleFilterChange}
               size="small"
             />
-          </Grid>
-          <Grid item xs={12} sm={3}>
+          </Grid2>
+          <Grid2 item xs={12} sm={3}>
             <TextField
               fullWidth
               select
@@ -200,8 +224,8 @@ function Books() {
                 </MenuItem>
               ))}
             </TextField>
-          </Grid>
-          <Grid item xs={12} sm={3}>
+          </Grid2>
+          <Grid2 item xs={12} sm={3}>
             <TextField
               fullWidth
               select
@@ -216,8 +240,8 @@ function Books() {
               <MenuItem value="createdAt">Date Added</MenuItem>
               <MenuItem value="rating">Rating</MenuItem>
             </TextField>
-          </Grid>
-          <Grid item xs={12} sm={2}>
+          </Grid2>
+          <Grid2 item xs={12} sm={2}>
             <TextField
               fullWidth
               select
@@ -230,8 +254,8 @@ function Books() {
               <MenuItem value="asc">Ascending</MenuItem>
               <MenuItem value="desc">Descending</MenuItem>
             </TextField>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Paper>
 
       <TableContainer component={Paper}>
