@@ -44,7 +44,8 @@ function AddBook() {
     publisher: '',
     publishedDate: '',
     categories: [],
-    coverImage: null,
+    coverImage: '',
+    coverUrl: '', // Add explicit coverUrl field
     rating: 0 // Add default rating value
   });
   const [previewImage, setPreviewImage] = useState(null);
@@ -94,7 +95,22 @@ function AddBook() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    console.log('Selected file:', file);
     if (file) {
+      // Check file type
+      const fileType = file.type.toLowerCase();
+      if (!fileType.includes('jpeg') && !fileType.includes('jpg') && !fileType.includes('png')) {
+        setErrors(prev => ({ 
+          ...prev, 
+          coverImage: 'Only JPG, JPEG, and PNG files are supported'
+        }));
+        return;
+      }
+
+      console.log('File type is valid:', fileType);
+      
+      // Clear previous error if any
+      setErrors(prev => ({ ...prev, coverImage: '' }));
       uploadMutation.mutate(file);
     }
   };
@@ -105,7 +121,7 @@ function AddBook() {
     if (!bookData.author) newErrors.author = 'Author is required';
     if (!bookData.description) newErrors.description = 'Description is required';
     if (bookData.categories.length === 0) newErrors.categories = 'At least one category is required';
-    if (!bookData.coverImage) newErrors.coverImage = 'Cover image is required';
+    if (!bookData.coverUrl) newErrors.coverImage = 'Cover image is required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -119,18 +135,28 @@ function AddBook() {
   };
 
   const uploadMutation = useMutation({
-    mutationFn: (file) => uploadApi.uploadFile(file),
+    mutationFn: (file) => {
+      // Create FormData to properly send the file
+      const formData = new FormData();
+      formData.append('file', file);
+      return uploadApi.uploadFile(formData);
+    },
     onSuccess: (data) => {
       setPreviewImage(data.url);
-      setBookData(prev => ({ ...prev, coverUrl: data.url }));
+      setBookData(prev => ({ 
+        ...prev, 
+        coverUrl: data.name,
+        coverImage: data.url // Set both for consistency
+      }));
       if (errors.coverImage) {
         setErrors(prev => ({ ...prev, coverImage: '' }));
       }
     },
     onError: (error) => {
+      console.error('Upload error:', error);
       setErrors(prev => ({ 
         ...prev, 
-        coverImage: error.response?.data?.message || 'Failed to upload image' 
+        coverImage: error.response?.data?.message || 'Failed to upload image. Please try a different file.' 
       }));
     }
   });

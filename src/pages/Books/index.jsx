@@ -143,30 +143,30 @@ function Books() {
     setDeleteDialog({ open: true, bookId });
   };
 
-  const handleDeleteConfirm = async () => {
-    try {
-      await bookApi.deleteBook(deleteDialog.bookId);
-      setDeleteDialog({ open: false, bookId: null });
-      await refetch();
+  // const handleDeleteConfirm = async () => {
+  //   try {
+  //     await bookApi.deleteBook(deleteDialog.bookId);
+  //     setDeleteDialog({ open: false, bookId: null });
+  //     await refetch();
       
-      if (data?.books?.length === selectedBooks.length) {
-        setPagination({
-          ...pagination,
-          page: 1
-        });
-        // Force a second refetch to load page 1 data
-        setTimeout(() => {
-          refetch();
-        }, 100);
-      }
-    } catch (error) {
-      console.error('Error deleting book:', error);
-    }
-  };
+  //     if (data?.books?.length === selectedBooks.length) {
+  //       setPagination({
+  //         ...pagination,
+  //         page: 1
+  //       });
+  //       // Force a second refetch to load page 1 data
+  //       setTimeout(() => {
+  //         refetch();
+  //       }, 100);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting book:', error);
+  //   }
+  // };
 
-  const handleDeleteCancel = () => {
-    setDeleteDialog({ open: false, bookId: null });
-  };
+  // const handleDeleteCancel = () => {
+  //   setDeleteDialog({ open: false, bookId: null });
+  // };
 
   return (
     <Box>
@@ -312,7 +312,7 @@ function Books() {
                     />
                   ))}
                 </TableCell>
-                <TableCell>{book.rating && typeof book.rating === 'number' ? book.rating.toFixed(1) : 'N/A'}</TableCell>
+                <TableCell>{book.rating}</TableCell>
                 <TableCell align="right">
                   <IconButton onClick={() => handleViewBook(book)}>
                     <VisibilityIcon />
@@ -340,7 +340,7 @@ function Books() {
       </TableContainer>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog
+      {/* <Dialog
         open={deleteDialog.open}
         onClose={handleDeleteCancel}
       >
@@ -354,7 +354,7 @@ function Books() {
           <Button onClick={handleDeleteCancel}>Cancel</Button>
           <Button onClick={handleDeleteConfirm} color="error">Delete</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
 
       {/* Batch Delete Confirmation Dialog */}
       <Dialog

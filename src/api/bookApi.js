@@ -75,7 +75,7 @@ export const bookApi = {
   getBook: mockApiClient.getBook,
   createBook: mockApiClient.createBook,
   updateBook: mockApiClient.updateBook,
-  deleteBook: mockApiClient.deleteBook,
+  // deleteBook: mockApiClient.deleteBook, 
   batchDeleteBooks: mockApiClient.batchDeleteBooks,
   restoreBook: mockApiClient.restoreBook
 };
